@@ -10,6 +10,8 @@ import React, {useState} from 'react';
 import {View, SafeAreaView, Text, StyleSheet, FlatList} from 'react-native'
 import ListItem from './ListItem.js'
 import AddButton from './AddButton.js'
+import AddForm from './AddForm.js'
+import DateTimePicker from '@react-native-community/datetimepicker';
  
  const GetRand = () => {
    return Math.floor(Math.random * 239487589);
@@ -26,6 +28,9 @@ import AddButton from './AddButton.js'
       {/* <Text style={styles.header}>CalBase</Text> */}
       <Text style={styles.header}>NEX</Text>
       <AddButton text="add event"></AddButton>
+      <View>
+          <AddForm></AddForm>
+        </View>
       <FlatList
       data = {RemoveItemsBeforeToday(SortItems(items))}
       renderItem = {({item}) => <ListItem item={item}/>}
