@@ -6,10 +6,10 @@ import {useState} from 'react'
 import {Button, withTheme} from 'react-native-elements'
 import {View, SafeAreaView, Text, StyleSheet, FlatList, TouchableOpacity} from 'react-native'
 import DateTimePicker from '@react-native-community/datetimepicker';
+// import {setForm} from 'react'
 
 
-
- const AddForm = () => {
+ const AddForm = ({setForm}) => {
     const [date, setDate] = useState(new Date());
     const [mode, setMode] = useState('date');
     const [show, setShow] = useState(false);
@@ -32,10 +32,25 @@ import DateTimePicker from '@react-native-community/datetimepicker';
     const showTimepicker = () => {
       showMode('time');
     };
+
+    const addEvent = item => {
+      setItems(prevItems => {
+        return [{}, ...prevItems]
+      })
+    }
   return (
     <TouchableOpacity>
         <View style={styles.addForm}>
-            <TextInput style={styles.textInput} placeholder="title"/>
+            <TextInput
+              style={styles.textInput}
+              placeholder="title"
+              onChangeText={(text) => {
+                console.log(text, 'test')
+                this.toSetForm(title)
+                }}
+              // ref= {(el) => { title = el; }}
+              // value={text}
+              />
             <TextInput style={styles.textInput} placeholder="details"/>
             <DateTimePicker
             testID="dateTimePicker"
@@ -45,7 +60,7 @@ import DateTimePicker from '@react-native-community/datetimepicker';
           minuteInterval = {5}
           display="spinner"
           onChange={onChange}/>
-          <Button title="done" titleStyle={styles.button} buttonStyle={styles.button}
+          <Button title="done" titleStyle={styles.button} buttonStyle={styles.button} onclick={addEvent}
           />
         </View>
     </TouchableOpacity>

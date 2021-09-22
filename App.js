@@ -13,27 +13,42 @@ import AddButton from './AddButton.js'
 import AddForm from './AddForm.js'
 import DateTimePicker from '@react-native-community/datetimepicker';
  
+
  const GetRand = () => {
    return Math.floor(Math.random * 239487589);
  }
+
  
  const App = () => {
-   const [items, setItems] = useState([
+  const [items, setItems] = useState([
      {id: GetRand(), date: 1633095600000, title: 'Harvest Interview', details: 'Second interview'},
      {id: GetRand(), date: 1631289600000, title: 'Get Groceries', details: 'Need eggs and pizza'},
      {id: GetRand(), date: 1633201200000, title: 'Psychiatrist Appt', details: 'with doctor'}
    ])
+   const [addForm, setForm] = useState({
+     title: '',
+     details: '',
+     date: '',
+     id: null
+   })
+
+   function toSetForm(title) {
+     console.log(title, 'AHH')
+    setForm((title) => {
+      {title: title}
+    })
+   }
   return (
     <SafeAreaView>
       {/* <Text style={styles.header}>CalBase</Text> */}
       <Text style={styles.header}>NEX</Text>
       <AddButton text="add event"></AddButton>
       <View>
-          <AddForm></AddForm>
+          <AddForm setForm={setForm} toSetForm={toSetForm} addForm={addForm}></AddForm>
         </View>
       <FlatList
       data = {RemoveItemsBeforeToday(SortItems(items))}
-      renderItem = {({item}) => <ListItem item={item}/>}
+      renderItem = {({item, form}) => <ListItem item={item}/>}
       />
     </SafeAreaView>
   );
