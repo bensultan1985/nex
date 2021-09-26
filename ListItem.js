@@ -3,8 +3,7 @@
 import React from 'react';
  import {View, SafeAreaView, Text, StyleSheet, FlatList, TouchableOpacity} from 'react-native'
   
-  const ListItem = ({item}) => {
-      console.log(item)
+  const ListItem = ({item, data}) => {
    return (
      <TouchableOpacity>
          <View style={styles.listItem}>

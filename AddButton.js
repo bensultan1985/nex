@@ -4,9 +4,10 @@ import React from 'react';
 import {View, SafeAreaView, Text, StyleSheet, FlatList, TouchableOpacity} from 'react-native'
  
  
- const AddButton = ({text}) => {
+ const AddButton = ({text, func}) => {
+   console.log('func', func)
   return (
-    <TouchableOpacity>
+    <TouchableOpacity onPress={func}>
         <View style={styles.listItem}>
             <Text style={styles.header}>+</Text><Text> {text}</Text>
         </View>

@@ -9,7 +9,8 @@ import DateTimePicker from '@react-native-community/datetimepicker';
 // import {setForm} from 'react'
 
 
- const AddForm = ({setForm}) => {
+ const AddForm = ({setForm, addForm, toSetForm, setItems, items}) => {
+  //  console.log(addForm)
     const [date, setDate] = useState(new Date());
     const [mode, setMode] = useState('date');
     const [show, setShow] = useState(false);
@@ -18,6 +19,7 @@ import DateTimePicker from '@react-native-community/datetimepicker';
       const currentDate = selectedDate || date;
       setShow(Platform.OS === 'ios');
       setDate(currentDate);
+      toSetForm(currentDate, 'date')
     };
     
     const showMode = (currentMode) => {
@@ -34,9 +36,10 @@ import DateTimePicker from '@react-native-community/datetimepicker';
     };
 
     const addEvent = item => {
-      setItems(prevItems => {
-        return [{}, ...prevItems]
-      })
+      toSetForm('', 'id')
+      setItems(items => [...items, addForm])
+      // console.log(items, 'items')
+
     }
   return (
     <TouchableOpacity>
@@ -45,13 +48,17 @@ import DateTimePicker from '@react-native-community/datetimepicker';
               style={styles.textInput}
               placeholder="title"
               onChangeText={(text) => {
-                console.log(text, 'test')
-                this.toSetForm(title)
+                // console.log(addForm)
+                toSetForm(text, 'title')
                 }}
-              // ref= {(el) => { title = el; }}
-              // value={text}
               />
-            <TextInput style={styles.textInput} placeholder="details"/>
+            <TextInput style={styles.textInput}
+            placeholder="details"
+            onChangeText={(text) => {
+              // console.log(addForm)
+              toSetForm(text, 'details')
+              }}
+              />
             <DateTimePicker
             testID="dateTimePicker"
           value={date}
@@ -60,7 +67,7 @@ import DateTimePicker from '@react-native-community/datetimepicker';
           minuteInterval = {5}
           display="spinner"
           onChange={onChange}/>
-          <Button title="done" titleStyle={styles.button} buttonStyle={styles.button} onclick={addEvent}
+          <Button title="done" titleStyle={styles.button} buttonStyle={styles.button} onPress={addEvent}
           />
         </View>
     </TouchableOpacity>
