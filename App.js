@@ -17,8 +17,11 @@ import AddForm from './AddForm.js'
 import DateTimePicker from '@react-native-community/datetimepicker';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
+_init = true;
+
  const GetRand = () => {
-   let num =  Math.floor(Math.random * 239487589);
+   let num =  Math.floor(Math.random() * 239487589);
+   console.log(num)
    return num;
  }
 
@@ -29,6 +32,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
     let jsonStr = JSON.stringify({items});
     console.log(jsonStr, 'string')
     try {
+      console.log(jsonStr, 'data to send to phone')
       await AsyncStorage.setItem(
         'nexItems',
         jsonStr
@@ -44,12 +48,14 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 
   const GetData = async () => {
     try {
+      console.log('1')
       const value = await AsyncStorage.getItem('nexItems');
-      if (typeof value != null && value != '') {
+      console.log('data received from phone: ', value)
+      // if (typeof value != null && value != '') {
+        console.log('2')
         parVal = JSON.parse(value)
-        console.log('parVal', parVal.items.items)
-        SetItemsArr(parVal.items.items)
-      }
+        SetItemsArr(parVal.items)
+      // }
     } catch (error) {
       // Error retrieving data
       console.log(error)
@@ -61,11 +67,19 @@ console.log('returned', str)
   }
 
   const SetItemsArr =(value) => {
-    console.log('current store:', value)
-    if (value != null) {
-      parsedVal = JSON.parse(value)
-      setItems(parsedVal)
-      console.log(parsedVal, 'val')
+    console.log('attempting to update data...')
+    console.log(value, 'value')
+    console.log(value, items)
+    let match = true;
+    let longerArr = [];
+    if (value.length >= items.length) longerArr = value.length; else longerArr = items.length;
+    for (let i =0; i < longerArr.length; i++) {
+      if (value[i].key != items[i].key) match = false;
+    }
+    if ((value != null && match == false) || _init == true) {
+      console.log('ADDED NEW DATA', value, match, _init)
+      _init = false;
+      setItems(value)
     }
   }
 
@@ -79,11 +93,12 @@ console.log('returned', str)
    )
   //  SetData()
   GetData()
+  let firstKey = GetRand();
    const [addForm, setForm] = useState({
      title: '',
      details: '',
      date: '',
-     key: null
+     key: firstKey
    })
 
   const [_openAddForm, setOpenAddForm] = useState(false)
@@ -110,7 +125,8 @@ console.log('returned', str)
       }
       case 'id': {
         let text = GetRand();
-        setForm({...addForm, id: text});
+        console.log('key', text)
+        setForm({...addForm, key: text});
         return;
       }
     }

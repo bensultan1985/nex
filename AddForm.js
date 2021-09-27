@@ -9,7 +9,7 @@ import DateTimePicker from '@react-native-community/datetimepicker';
 // import {setForm} from 'react'
 
 
- const AddForm = ({setForm, addForm, toSetForm, setItems, items}) => {
+ const AddForm = ({setForm, addForm, toSetForm, setItems, items, SetData}) => {
   //  console.log(addForm)
     const [date, setDate] = useState(new Date());
     const [mode, setMode] = useState('date');
@@ -36,10 +36,10 @@ import DateTimePicker from '@react-native-community/datetimepicker';
     };
 
     const addEvent = item => {
-      toSetForm('', 'id')
-      setItems(items => [...items, addForm])
-      // console.log(items, 'items')
-
+      toSetForm('', 'id');
+      setItems(items => [...items, addForm]);
+      console.log('adding event...')
+      SetData();
     }
   return (
     <TouchableOpacity>
