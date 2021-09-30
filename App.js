@@ -21,7 +21,6 @@ _init = true;
 
  const GetRand = () => {
    let num =  Math.floor(Math.random() * 239487589);
-   console.log(num)
    return num;
  }
 
@@ -29,15 +28,21 @@ _init = true;
  const App = () => {
 
   const SetData = async () => {
-    let jsonStr = JSON.stringify({items});
-    console.log(jsonStr, 'string')
+    console.log('setting data')
+    console.log('items to set', items, addForm)
+    if (addForm) setItems(items => [...items, addForm]);
+    console.log('before set store', items)
+    SetStore()
+  }
+
+  const SetStore = async () => {
     try {
-      console.log(jsonStr, 'data to send to phone')
+      let jsonStr = JSON.stringify({items});
       await AsyncStorage.setItem(
         'nexItems',
         jsonStr
       );
-      GetData()
+      // GetData()
     } catch (error) {
       // Error saving datacn
       console.log(error)
@@ -48,13 +53,12 @@ _init = true;
 
   const GetData = async () => {
     try {
-      console.log('1')
+      if (!_init) return;
       const value = await AsyncStorage.getItem('nexItems');
       console.log('data received from phone: ', value)
       // if (typeof value != null && value != '') {
-        console.log('2')
         parVal = JSON.parse(value)
-        SetItemsArr(parVal.items)
+        SetItemsArr(parVal.items, true)
       // }
     } catch (error) {
       // Error retrieving data
@@ -66,9 +70,8 @@ _init = true;
 console.log('returned', str)
   }
 
-  const SetItemsArr =(value) => {
+  const SetItemsArr =(value, fromApp) => {
     console.log('attempting to update data...')
-    console.log(value, 'value')
     console.log(value, items)
     let match = true;
     let longerArr = [];
@@ -76,6 +79,7 @@ console.log('returned', str)
     for (let i =0; i < longerArr.length; i++) {
       if (value[i].key != items[i].key) match = false;
     }
+    console.log('2 attemps', value, match)
     if ((value != null && match == false) || _init == true) {
       console.log('ADDED NEW DATA', value, match, _init)
       _init = false;
@@ -86,13 +90,13 @@ console.log('returned', str)
 
   const [items, setItems] = useState(
     [
-     {key: 230874309, date: 1633095600000, title: 'Harvest Interview', details: 'Second interview'},
-     {key: 345867024, date: 1631289600000, title: 'Get Groceries', details: 'Need eggs and pizza'},
-     {key: 348506850, date: 1633201200000, title: 'Psychiatrist Appt', details: 'with doctor'}
+    //  {key: 230874309, date: 1633095600000, title: 'Harvest Interview', details: 'Second interview'},
+    //  {key: 345867024, date: 1631289600000, title: 'Get Groceries', details: 'Need eggs and pizza'},
+    //  {key: 348506850, date: 1633201200000, title: 'Psychiatrist Appt', details: 'with doctor'}
    ]
    )
   //  SetData()
-  GetData()
+  if (_init) GetData()
   let firstKey = GetRand();
    const [addForm, setForm] = useState({
      title: '',
@@ -125,7 +129,6 @@ console.log('returned', str)
       }
       case 'id': {
         let text = GetRand();
-        console.log('key', text)
         setForm({...addForm, key: text});
         return;
       }
@@ -173,7 +176,6 @@ console.log('returned', str)
  })
 
  function SortItems(items) {
-   console.log('sorting...', items)
    items.sort(function (a, b) {
     return a.date - b.date;
     });
