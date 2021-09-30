@@ -2,6 +2,7 @@
 
 import React from 'react';
  import {View, SafeAreaView, Text, StyleSheet, FlatList, TouchableOpacity} from 'react-native'
+  import DelEvent from './DelEvent.js'
   
   const ListItem = ({item, data}) => {
    return (
@@ -10,6 +11,8 @@ import React from 'react';
            <ItemHead item={item}>
              </ItemHead>
              <Text style={styles.body}>{item.details}</Text>
+             <DelEvent mainText="delete" text="" func={DelThisEvent}></DelEvent>
+
          </View>
      </TouchableOpacity>
    );
@@ -72,6 +75,10 @@ import React from 'react';
       dt.getFullYear().toString().padStart(4, '0')} ${
       dt.getHours().toString().padStart(2, '0')}:${
       dt.getMinutes().toString().padStart(2, '0')}`
+  }
+
+  const DelThisEvent = () => {
+    console.log('delete')
   }
 
   const ItemHead = ({item}) => {

@@ -9,14 +9,14 @@ flow
  */
 //to run: react-native run-ios
 
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {View, SafeAreaView, Text, StyleSheet, FlatList} from 'react-native'
 import ListItem from './ListItem.js'
 import AddButton from './AddButton.js'
 import AddForm from './AddForm.js'
 import DateTimePicker from '@react-native-community/datetimepicker';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-
+import { Icon } from 'react-native-elements'
 _init = true;
 
  const GetRand = () => {
@@ -31,9 +31,13 @@ _init = true;
     console.log('setting data')
     console.log('items to set', items, addForm)
     if (addForm) setItems(items => [...items, addForm]);
+    
     console.log('before set store', items)
-    SetStore()
   }
+  //effect sets store - learn why
+  useEffect(() => {
+    SetStore()
+  })
 
   const SetStore = async () => {
     try {
@@ -42,6 +46,7 @@ _init = true;
         'nexItems',
         jsonStr
       );
+      return;
       // GetData()
     } catch (error) {
       // Error saving datacn
@@ -147,7 +152,7 @@ console.log('returned', str)
     <SafeAreaView style={styles.safe}>
       {/* <Text style={styles.header}>CalBase</Text> */}
       <Text style={styles.header}>NEX</Text>
-      <AddButton text="add event" func={toggleForm}></AddButton>
+      <AddButton text="add event" func={toggleForm} buttonChar="+"></AddButton>
       {formView}
       <FlatList style={styles.eventList}
       data = {RemoveItemsBeforeToday(SortItems(items))}
